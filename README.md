@@ -1,1 +1,1 @@
-# Innovative Collage
+# Innovative Academy
