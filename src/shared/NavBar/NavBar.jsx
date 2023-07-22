@@ -4,19 +4,19 @@ import logo from "../../assets/logo1.png"
 const NavBar = () => {
    const navItems = <>
       <NavLink to="/" className='text-[18px] mr-5' style={({ isActive, isPending }) => {
-         return { fontWeight: isActive ? "bold" : "", color: isPending ? "red" : "#06a5c5", };
+         return { fontWeight: isActive ? "bold" : "", color: isPending ? "red" : "#F36B22", };
       }}> Home </NavLink>
 
       <NavLink to="/instructors" className='text-[18px] mr-5' style={({ isActive, isPending }) => {
-         return { fontWeight: isActive ? "bold" : "", color: isPending ? "red" : "#06a5c5", };
+         return { fontWeight: isActive ? "bold" : "", color: isPending ? "red" : "#F36B22", };
       }}>  Colleges </NavLink>
 
       <NavLink to="/classes" className='text-[18px] mr-5' style={({ isActive, isPending }) => {
-         return { fontWeight: isActive ? "bold" : "", color: isPending ? "red" : "#06a5c5", };
+         return { fontWeight: isActive ? "bold" : "", color: isPending ? "red" : "#F36B22", };
       }}>  Admission </NavLink>
 
       <NavLink to="/classes" className='text-[18px] mr-5' style={({ isActive, isPending }) => {
-         return { fontWeight: isActive ? "bold" : "", color: isPending ? "red" : "#06a5c5", };
+         return { fontWeight: isActive ? "bold" : "", color: isPending ? "red" : "#F36B22", };
       }}>  My College </NavLink>
      
    </>
@@ -34,7 +34,7 @@ const NavBar = () => {
                   </ul>
                </div>
                <Link to="/"><img src={logo} alt="Logo" className="w-16" /></Link>
-               <Link to="/" className="text-2xl font-bold ml-2">Innovative <br /> Academy</Link>
+               <Link to="/" className="text-2xl font-bold ml-2"><span className="text-[#32345B]">Innovative</span> <br /> <span className="text-[#F36B22]">Academy</span></Link>
             </div>
 
             <div className="navbar-center hidden lg:flex">
@@ -45,7 +45,7 @@ const NavBar = () => {
 
             <div className="navbar-end">
                   <Link to="/login">
-                     <button className='btn btn-outline border-[#00b4d8] hover:border-cyan-700 hover:bg-[#06a5c5] rounded-md capitalize text-[16px]'>Log In</button>
+                  <button className='btn btn-sm btn-outline border-[#F36B22] hover:border-[#F36B22] hover:bg-[#F56A1E] rounded-sm capitalize text-[#32345B] text-[16px]'>Log In</button>
                   </Link>
             </div>
          </div>
