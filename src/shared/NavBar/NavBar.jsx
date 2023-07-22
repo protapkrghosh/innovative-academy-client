@@ -1,7 +1,20 @@
 import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/logo1.png"
+import { useContext } from "react";
+import { AuthContext } from "../../pages/providers/AuthProvider";
 
 const NavBar = () => {
+   const { users, userLogOut } = useContext(AuthContext)
+   console.log(users)
+
+   const handleLogOut = () => {
+      userLogOut()
+         .then()
+         .catch((error) => {
+            console.log(error)
+         });
+   }
+
    const navItems = <>
       <NavLink to="/" className='text-[18px] mr-5' style={({ isActive, isPending }) => {
          return { fontWeight: isActive ? "bold" : "", color: isPending ? "red" : "#F36B22", };
@@ -18,7 +31,7 @@ const NavBar = () => {
       <NavLink to="/classes" className='text-[18px] mr-5' style={({ isActive, isPending }) => {
          return { fontWeight: isActive ? "bold" : "", color: isPending ? "red" : "#F36B22", };
       }}>  My College </NavLink>
-     
+
    </>
 
    return (
@@ -44,9 +57,20 @@ const NavBar = () => {
             </div>
 
             <div className="navbar-end">
+
+               <input type="text" placeholder="Type here" className="input input-sm border border-[#F56A1E] rounded-2xl w-52 max-w-xs mr-3" />
+
+               <Link to="profile" className="mr-3 hover:underline font-serif italic">
+                  {users ? users?.displayName : ''}
+               </Link>
+
+               {users ?
+                  <button onClick={handleLogOut} className='btn btn-sm btn-outline border-[#F36B22] hover:border-[#943e10] hover:bg-[#F56A1E] rounded-2xl capitalize text-[#32345B] text-[16px]'>Log Out</button> :
+
                   <Link to="/login">
-                  <button className='btn btn-sm btn-outline border-[#F36B22] hover:border-[#F36B22] hover:bg-[#F56A1E] rounded-sm capitalize text-[#32345B] text-[16px]'>Log In</button>
+                     <button className='btn btn-sm btn-outline border-[#F36B22] hover:border-[#943e10] hover:bg-[#F56A1E] rounded-2xl capitalize text-[#32345B] text-[16px]'>Log In</button>
                   </Link>
+               }
             </div>
          </div>
       </div>
