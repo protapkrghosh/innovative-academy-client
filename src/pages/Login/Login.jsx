@@ -43,12 +43,12 @@ const Login = () => {
    return (
       <div>
          <Helmet>
-            <title>Skill Up - Login</title>
+            <title>Login - Innovative Academy</title>
          </Helmet>
 
          <div className="hero py-10">
             <div className="hero-content w-full">
-               <div className="card w-full max-w-sm border rounded-md bg-base-200">
+               <div className="card w-full max-w-sm border border-[#f36b2233] shadow-md rounded-md bg-base-200">
                   <h2 className='text-4xl text-[#32345B] text-center font-bold mt-5 uppercase'>Login</h2>
                   <form onSubmit={handleSubmit(onSubmit)} className="card-body">
                      <div className="form-control">
