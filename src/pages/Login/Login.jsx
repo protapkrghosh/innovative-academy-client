@@ -12,7 +12,7 @@ import { AuthContext } from "../providers/AuthProvider";
 const Login = () => {
    const { register, handleSubmit, formState: { errors } } = useForm();
    const [passwordShown, setPasswordShown] = useState(false);
-   const { googleSign, signIn } = useContext(AuthContext);
+   const { googleSign, facebookSign, signIn } = useContext(AuthContext);
    const [error, setError] = useState('');
    const navigate = useNavigate();
    const location = useLocation();
@@ -34,6 +34,14 @@ const Login = () => {
 
    const handleGoogleSignIn = () => {
       googleSign()
+         .then(() => {
+            navigate(from, { replace: true });
+         })
+         .catch(error => setError(error.message))
+   }
+
+   const handleFacebookSignIn = () => {
+      facebookSign()
          .then(() => {
             navigate(from, { replace: true });
          })
@@ -77,7 +85,7 @@ const Login = () => {
                         <div className="flex justify-center items-center mt-3 space-x-3">
                            <span onClick={handleGoogleSignIn} className=""><FcGoogle className='mr-2 text-2xl cursor-pointer p-2 w-[45px] h-[45px] rounded-full border border-[#32345B] hover:bg-[#e1e2e6] transition' /></span>
 
-                           <span onClick={handleGoogleSignIn} className=""><FaFacebookF className='mr-2 text-blue-600 text-2xl cursor-pointer p-2 w-[45px] h-[45px] rounded-full border border-[#32345B] hover:bg-[#e1e2e6] transition' /></span>
+                           <span onClick={handleFacebookSignIn} className=""><FaFacebookF className='mr-2 text-blue-600 text-2xl cursor-pointer p-2 w-[45px] h-[45px] rounded-full border border-[#32345B] hover:bg-[#e1e2e6] transition' /></span>
                         </div>
                      </div>
 
