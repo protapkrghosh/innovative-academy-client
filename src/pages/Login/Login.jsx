@@ -1,103 +1,108 @@
-import { FcGoogle } from "react-icons/fc";
-import { FaFacebookF } from "react-icons/fa";
 import { useForm } from "react-hook-form";
-import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
-import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-import { AuthContext } from "../providers/AuthProvider";
+import { useContext, useState } from "react";
+import { RiEyeFill, RiEyeOffFill } from "react-icons/ri";
+import Swal from "sweetalert2";
+import { AuthContext } from "../../Context/AuthProvider";
+import GoogleLogin from "../../Components/Shared/GoogleLogin";
 
 const Login = () => {
-   const { register, handleSubmit, formState: { errors } } = useForm();
-   const [passwordShown, setPasswordShown] = useState(false);
-   const { googleSign, facebookSign, signIn } = useContext(AuthContext);
-   const [error, setError] = useState('');
-   const navigate = useNavigate();
-   const location = useLocation();
-   const from = location.state?.from?.pathname || "/";
+  const { login } = useContext(AuthContext);
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-   const togglePassword = () => {
-      setPasswordShown(!passwordShown);
-   };
+  const location = useLocation();
 
-   const onSubmit = (data) => {
-      signIn(data.email, data.password)
-         .then((result) => {
-            const user = result.user;
-            // console.log(user);
-            navigate(from, { replace: true });
-         })
-         .catch(error => setError(error.message))
-   }
+  const from = location.state?.from?.pathname || "/";
 
-   const handleGoogleSignIn = () => {
-      googleSign()
-         .then(() => {
-            navigate(from, { replace: true });
-         })
-         .catch(error => setError(error.message))
-   }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-   const handleFacebookSignIn = () => {
-      facebookSign()
-         .then(() => {
-            navigate(from, { replace: true });
-         })
-         .catch(error => setError(error.message))
-   }
+  const onSubmit = (data) => {
+    const { email, password } = data;
+    login(email, password)
+      .then(() => {
+        navigate(from);
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Login has been successful",
+        });
+      })
+      .catch((err) => {
+        setError(err.message.slice(22, -2));
+      });
+  };
 
-   return (
-      <div>
-         <Helmet>
-            <title>Login - Innovative Academy</title>
-         </Helmet>
+  return (
+    <div className="py-16 px-2 max-w-lg mx-auto lg:h-[500px]">
+      <h2 className="textPrimary text-center my-10">Please Login</h2>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="mb-4">
+          <input
+            type="email"
+            placeholder="Email"
+            id="email"
+            className="w-full focus:outline-none focus:border-green-500 p-2 border border-gray-300 rounded"
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^\S+@\S+$/i,
+                message: "Invalid email address",
+              },
+            })}
+          />
+          {errors.email && (
+            <span className="text-red-500">{errors.email.message}</span>
+          )}
+        </div>
+        <div className="mb-4 relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            id="password"
+            className="w-full p-2 border focus:outline-none focus:border-green-500 border-gray-300 rounded"
+            {...register("password", {
+              required: "Password is required",
+            })}
+          />
+          <span
+            className="absolute top-1/2 transform -translate-y-1/2 right-2 cursor-pointer"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <RiEyeOffFill /> : <RiEyeFill />}
+          </span>
+          {errors.password && (
+            <span className="text-red-500">{errors.password.message}</span>
+          )}
+        </div>
+        <label className="label">
+          <span className="label-text text-red-600">{error}</span>
+        </label>
 
-         <div className="hero py-10">
-            <div className="hero-content w-full">
-               <div className="card w-full max-w-sm border border-[#f36b2233] shadow-md rounded-md bg-base-200">
-                  <h2 className='text-4xl text-[#32345B] text-center font-bold mt-5 uppercase'>Login</h2>
-                  <form onSubmit={handleSubmit(onSubmit)} className="card-body">
-                     <div className="form-control">
-                        <label className="label">
-                           <span className="label-text">Email</span>
-                        </label>
-                        <input {...register("email", { required: true })} type="email" placeholder="Email" className="input input-bordered rounded-md" />
-                        {errors.email && <small className="text-rose-600 font-semibold">Email field is required</small>}
-                     </div>
+        <p className="mb-4">
+          Do not Have an account?{" "}
+          <Link to={"/user/register"} className="text-[#008e48]">
+            Register
+          </Link>
+        </p>
 
-                     <div className="form-control">
-                        <label className="label">
-                           <span className="label-text">Password</span>
-                        </label>
-                        <div className="flex justify-center items-center">
-                           <input {...register("password", { required: true })} type={passwordShown ? "text" : "password"} placeholder="Password" className="input input-bordered rounded-md w-full" />
-                           <span onClick={togglePassword} className="absolute right-14 cursor-pointer text-[18px]">{passwordShown ? <FaRegEye /> : <FaRegEyeSlash />}</span>
-                        </div>
-                        {errors.password && <small className="text-rose-600 font-semibold">Password field is required</small>}
-                     </div>
-
-                     <div className="form-control mt-6">
-                        <input type="submit" value="Login" className="btn bg-[#32345B] hover:bg-[#32345be8] text-white capitalize text-[16px] rounded-md" />
-                        <ToastContainer />
-
-                        <div className="flex justify-center items-center mt-3 space-x-3">
-                           <span onClick={handleGoogleSignIn} className=""><FcGoogle className='mr-2 text-2xl cursor-pointer p-2 w-[45px] h-[45px] rounded-full border border-[#32345B] hover:bg-[#e1e2e6] transition' /></span>
-
-                           <span onClick={handleFacebookSignIn} className=""><FaFacebookF className='mr-2 text-blue-600 text-2xl cursor-pointer p-2 w-[45px] h-[45px] rounded-full border border-[#32345B] hover:bg-[#e1e2e6] transition' /></span>
-                        </div>
-                     </div>
-
-
-                     <small className='text-center mt-2'>Don&lsquo;t have account? <Link to="/register" className='text-[#F36B22] font-semibold'>Register</Link></small>
-                  </form>
-                  <p className="text-red-500 text-center font-semibold -mt-5 mb-5">{error}</p>
-               </div>
-            </div>
-         </div>
-      </div>
-   );
+        <button
+          type="submit"
+          className="btn bg-blue-500 hover:bg-blue-400  text-white w-full"
+        >
+          Login
+        </button>
+        <Link to={"/user/reset"}>Forgot pass?</Link>
+      </form>
+      <div className="divider">OR</div>
+      <GoogleLogin></GoogleLogin>
+    </div>
+  );
 };
 
 export default Login;
